@@ -1,14 +1,16 @@
 import React from 'react'
-import User from './User'
+import User from './user'
 import SidebarNav from './sidebarNav'
 import Volunteer from './Volunteer'
 
 function Sidebar() {
     return (
-        <aside className="w-full  h-auto md:h-screen flex flex-col sticky top-0 bg-white dark:bg-black md:bg-transparent md:dark:bg-transparent p-2 md:p-0 z-10">
-           <User />
-           <SidebarNav />
-           <Volunteer />
+        <aside className="w-full h-auto md:h-screen flex flex-col sticky top-0 bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-md  z-10">
+           <div className="space-y-4">
+             <User />
+             <SidebarNav />
+             <Volunteer />
+           </div>
         </aside>
     )
 }

@@ -4,29 +4,31 @@ import { IconX } from "@tabler/icons-react";
 interface SummaryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  originalContent: string;
-  summarizedContent: string;
-  isLoading: boolean;
+  postId: string;
+  originalContent?: string;
+  summarizedContent?: string;
+  isLoading?: boolean;
 }
 
 export default function SummaryModal({
   isOpen,
   onClose,
-  originalContent,
-  summarizedContent,
-  isLoading
+  postId,
+  originalContent = '',
+  summarizedContent = '',
+  isLoading = false
 }: SummaryModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <div className="bg-white dark:bg-neutral-900 rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+      <DialogContent className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 border border-gray-700/30 rounded-[24px] p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto shadow-xl backdrop-blur-sm">
           <div className="flex items-center justify-between mb-4">
-            <DialogTitle className="text-xl font-bold text-black dark:text-white">
+            <DialogTitle className="text-2xl md:text-3xl font-semibold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
               Content Summary
             </DialogTitle>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
             >
               <IconX size={24} />
             </button>

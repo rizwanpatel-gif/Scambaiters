@@ -4,17 +4,20 @@ import Sidebar from "./components/ui/Sidebar";
 
 export default function Home() {
   return (
-    <div className="w-full min-h-screen flex flex-col md:flex-row bg-white dark:bg-black">
-     
-      <div className="w-1/4">
+    <div className="w-full min-h-screen flex flex-col md:flex-row bg-[#020d1f]">
+      {/* Sidebar: fixed on desktop, bottom navigation on mobile */}
+      <div className="md:w-64 md:min-w-[256px] md:max-w-[256px]">
         <Sidebar />
       </div>
       
-      <main className="w-full md:w-1/2 flex-1 flex flex-col items-center px-2 sm:px-4 md:px-8 py-4">
+      {/* Main Content */}
+      <main className="flex-1 px-4 md:px-8 py-6 max-w-4xl mx-auto w-full
+                     border-x border-[#1a2942] bg-gradient-to-b from-[#051530] to-[#0a1f3f]">
         <MainContent />
       </main>
-      {/* Leftbar: hidden on mobile, visible on lg+ */}
-      <div className="w-1/4">
+
+      {/* Right Sidebar */}
+      <div className="hidden lg:block w-80 min-w-[320px] max-w-[320px]">
         <Leftbar />
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client"
 
 import JoinCard from '../components/ui/JoinCard'
-import User from '../components/ui/User'
+import User from '../components/ui/user'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 

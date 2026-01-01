@@ -12,8 +12,8 @@ function Volunteer() {
     }
 
     return (
-        <div className="w-full font-mono mt-6 font-Roboto Flex font-semibold border-r-2 border-gray-300">
-            <h1 className='text-xl font-thin opacity-50 text-white border-spacing-x-4 px-[5vh] mt-5'> Community</h1>
+        <div className="w-full font-mono mt-6 font-Roboto Flex font-semibold ">
+            <h1 className='text-xl font-thin opacity-50 text-white border-spacing-x-4 px-[5vh]"" mt-5'> Community</h1>
             <ul className="text-xl text-white px-[5vh] text-wrap">
                 <li 
                     className="flex items-center bg-black rounded-[38px] w-3/5 h-[60px] text-xl mt-6 cursor-pointer hover:bg-opacity-80 transition-colors"

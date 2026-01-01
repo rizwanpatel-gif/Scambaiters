@@ -10,7 +10,7 @@ function SidebarNav() {
    const router= useRouter()
 
     return (
-        <div className="w-full h-[300px]  font-Roboto Flex font-semibold border-r-2 border-gray-300 ">
+        <div className="w-full h-[300px]  font-Roboto Flex font-semibold  ">
     <ul className=" text-xl text-white p-[5vh]">
        
                 <li className="flex items-center bg-black rounded-[38px] w-3/5 h-[60px] mt-3 text-xl " onClick={()=>{

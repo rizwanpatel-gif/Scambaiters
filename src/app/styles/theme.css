@@ -1,0 +1,37 @@
+@layer base {
+  :root {
+    --background: 226 32% 10%;
+    --card: 226 32% 17%;
+    --primary: 326 100% 69%;
+    --secondary: 326 100% 74%;
+    --accent: 291 99% 60%;
+    --text-primary: 0 0% 100%;
+    --text-secondary: 226 32% 75%;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply backdrop-blur-lg bg-white/5 border border-white/10 rounded-xl;
+  }
+  
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#FF61D2] to-[#FE9090];
+  }
+  
+  .neon-border {
+    @apply border border-[#FF61D2] shadow-[0_0_15px_rgba(255,97,210,0.5)];
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-md bg-white/5;
+  }
+
+  .gradient-bg {
+    @apply bg-gradient-to-br from-[#0F172A] to-[#1E293B];
+  }
+
+  .hover-effect {
+    @apply transition-all duration-300 hover:scale-[1.02];
+  }
+}

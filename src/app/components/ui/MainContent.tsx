@@ -2,19 +2,22 @@
 
 import { IconSearch } from "@tabler/icons-react";
 import axios from "axios";
-import { Query } from "mongoose";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, useMemo } from "react";
+import OptimizedPostCard from "./OptimizedPostCard";
+// import { useCache } from "../context/CacheContext";
 import PostCard from "./PostCard";
+import { debounce } from "lodash";
 
 // Loading skeleton component
 const PostSkeleton = () => (
-    <div className="w-full max-w-xl my-6 rounded-[38px] shadow-lg p-4 bg-white dark:bg-neutral-900 mx-auto flex flex-col gap-4 animate-pulse">
-        <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center">
-                <div className="rounded-full w-10 h-10 bg-gray-300 dark:bg-gray-600"></div>
-                <div className="ml-3">
-                    <div className="h-5 w-24 bg-gray-300 dark:bg-gray-600 rounded"></div>
+    <div className="glass-card w-full max-w-xl my-6 p-6 mx-auto flex flex-col gap-4 animate-pulse">
+        <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+                <div className="rounded-full w-10 h-10 bg-white/10"></div>
+                <div className="space-y-2">
+                    <div className="h-4 w-24 bg-white/10 rounded-full"></div>
+                    <div className="h-3 w-16 bg-white/5 rounded-full"></div>
                 </div>
             </div>
             <div className="w-16 h-10 bg-gray-300 dark:bg-gray-600 rounded-[38px]"></div>
@@ -139,7 +142,7 @@ const displayPosts = showSearchResults ? searchResults : posts;
             
             {showSearchResults && searchResults.length === 0 && !isSearching && (
                 <div className="text-white text-center py-8">
-                    <p>No posts found for "{searchQuery}"</p>
+                    <p>No posts found for {searchQuery}</p>
                     <button 
                         onClick={handleClearSearch}
                         className="mt-2 text-blue-400 hover:text-blue-300 underline"
