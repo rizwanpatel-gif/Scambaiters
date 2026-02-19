@@ -138,6 +138,15 @@ function MainContent() {
         </div>
       )}
 
+      {/* ── Empty state ── */}
+      {!isLoading && !showSearchResults && posts.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-24 gap-4 text-center">
+          <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center text-3xl">🛡️</div>
+          <h2 className="text-[#F0F0F0] font-bold text-lg">No posts yet</h2>
+          <p className="text-white/35 text-sm max-w-xs">Be the first to share a scam report or warning with the community.</p>
+        </div>
+      )}
+
       {/* ── Posts ── */}
       {!isLoading && displayPosts.map((post: any) => (
         <PostCard
