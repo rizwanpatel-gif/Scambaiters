@@ -2,10 +2,6 @@ import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
-// Check for required environment variables
-if (!process.env.TOKEN_SECRET) {
-  throw new Error("TOKEN_SECRET is not defined in environment variables");
-}
 
 interface TokenPayload {
   id: string;
