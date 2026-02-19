@@ -4,35 +4,33 @@ import { IconPlus, IconSpeakerphone, IconUserFilled } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
+const actions = [
+  { icon: IconPlus,          label: 'Create Post', path: '/post' },
+  { icon: IconUserFilled,    label: 'Members',     path: '/user' },
+  { icon: IconSpeakerphone,  label: 'Awareness',   path: '/user' },
+];
+
 function Volunteer() {
-    const router = useRouter()
+  const router = useRouter();
 
-    const handleCreatePost = () => {
-        router.push('/post')
-    }
-
-    return (
-        <div className="w-full font-mono mt-6 font-Roboto Flex font-semibold ">
-            <h1 className='text-xl font-thin opacity-50 text-white border-spacing-x-4 px-[5vh]"" mt-5'> Community</h1>
-            <ul className="text-xl text-white px-[5vh] text-wrap">
-                <li 
-                    className="flex items-center bg-black rounded-[38px] w-3/5 h-[60px] text-xl mt-6 cursor-pointer hover:bg-opacity-80 transition-colors"
-                    onClick={handleCreatePost}
-                >
-                    <IconPlus className="ml-4 mr-2" />
-                    Create
-                </li>
-                <li className="flex items-center bg-black rounded-[38px] w-3/5 h-[60px] mt-6 text-xl">
-                    <IconUserFilled className="ml-4 mr-2" />
-                    Member
-                </li>
-                <li className="flex items-center bg-black rounded-[38px] w-3/5 h-[60px] mt-6 text-xl">
-                    <IconSpeakerphone className="ml-4 mr-2" />
-                    awareness
-                </li>
-            </ul>
-        </div>
-    )
+  return (
+    <div className="w-full px-3">
+      <p className="text-[10px] font-semibold text-white/25 uppercase tracking-widest px-3 mb-2">Community</p>
+      <ul className="space-y-0.5">
+        {actions.map(({ icon: Icon, label, path }) => (
+          <li key={label}>
+            <button
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-white/55 hover:bg-white/10 hover:text-white transition-all duration-150"
+              onClick={() => router.push(path)}
+            >
+              <Icon size={17} />
+              <span>{label}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
-export default Volunteer
+export default Volunteer;

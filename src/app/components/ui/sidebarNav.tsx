@@ -1,46 +1,44 @@
 "use client"
-import { IconBuildingCommunity, IconHomeFilled, IconPlayerEjectFilled, IconSettingsFilled } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
+import { IconBuildingCommunity, IconHomeFilled, IconMessageCircle, IconSettingsFilled } from '@tabler/icons-react'
+import { useRouter, usePathname } from 'next/navigation'
 import React from 'react'
 
+const navItems = [
+  { icon: IconHomeFilled,          label: 'Feed',        path: '/' },
+  { icon: IconBuildingCommunity,   label: 'Communities', path: '/user' },
+  { icon: IconMessageCircle,       label: 'Comments',    path: '/comments' },
+  { icon: IconSettingsFilled,      label: 'Settings',    path: '/user' },
+];
 
 function SidebarNav() {
+  const router = useRouter();
+  const pathname = usePathname();
 
-
-   const router= useRouter()
-
-    return (
-        <div className="w-full h-[300px]  font-Roboto Flex font-semibold  ">
-    <ul className=" text-xl text-white p-[5vh]">
-       
-                <li className="flex items-center bg-black rounded-[38px] w-3/5 h-[60px] mt-3 text-xl " onClick={()=>{
-                   router.push("/")
-                }} >
-                <IconHomeFilled className='mr-2 ml-2'></IconHomeFilled>
-                  Feed
-                </li>
-                <li className="flex items-center bg-black rounded-[38px] w-3/5 h-[60px] mt-3 text-xl "onClick={()=>{
-                   router.push("/user")
-                }}  >
-             <IconBuildingCommunity className='mr-2 ml-2' ></IconBuildingCommunity>
-                communities
-                </li>
-                <li className="flex items-center bg-black rounded-[38px] w-3/5 h-[60px] mt-3 text-xl " onClick={()=>{
-                   router.push("/user")
-                }}  >
-                <IconPlayerEjectFilled className='mr-2 ml-2'>
-                </IconPlayerEjectFilled>
-                 Comments
-                </li>
-                <li className="flex items-center bg-black rounded-[38px] w-3/5 h-[60px] mt-3 text-xl " onClick={()=>{
-                   router.push("/user")
-                }} >
-                <IconSettingsFilled className='mr-2 ml-2'></IconSettingsFilled>
-                  Settings
-                </li>
-        </ul>
-  </div>
-    )
+  return (
+    <nav className="w-full px-3">
+      <p className="text-[10px] font-semibold text-white/25 uppercase tracking-widest px-3 mb-2">Menu</p>
+      <ul className="space-y-0.5">
+        {navItems.map(({ icon: Icon, label, path }) => {
+          const isActive = pathname === path;
+          return (
+            <li key={label}>
+              <button
+                onClick={() => router.push(path)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
+                  isActive
+                    ? 'bg-white text-[#0A0A0A]'
+                    : 'text-white/55 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                <Icon size={17} />
+                <span>{label}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
 }
 
-export default SidebarNav
+export default SidebarNav;

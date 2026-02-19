@@ -1,46 +1,71 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-
 import { useRouter } from 'next/navigation'
 import axios from 'axios';
-function User() {
-  const [name,setname]= useState("Signup");
-  const [email,setemail]= useState("Login");
-  const curentuser= async function () {
-      try {
-        const respone= await axios.get("http://localhost:3000/api/user/currentuser");
-         setemail(respone.data.data.
-          email)
-          setname(respone.data.data.username)
-      } catch (error) {
-        console.log(error)
-      }
-  }
-  useEffect(()=>{
-    curentuser()
-  },[])
 
-  const router =useRouter()
-    return (
-        <div className="w-full  mt-2">
-             <div className="relative w-52 h-28 ml-10 mt-5 ">
-            <div className="absolute w-24 h-24  rounded-full transform   ">
-              <img src="/lastlogo.png" className='w-full h-full border-2 border-white rounded-full' />
-            </div>
-            <div className="absolute w-24 h-24 rounded-full  transform translate-x-14 border-2 border-white ">
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVF9XCN-3m0QhFLhp6NOK63wB2hRJXfmBcpg&s" alt="" className='w-full  rounded-full'   />
-            </div>
-            </div>
-            <div>
-            <button className='text-black font-Roboto Flex font-bold text-sm ml-14 mt-2 hover:text-green-300 block'onClick={()=>{
-              router.push("/Account/signup")
-            }}> {email} </button>
-            <button className='text-black font-Roboto Flex font-bold text-xl  mt-2 hover:text-green-300 ml-14' onClick={()=>{
-              router.push("/Account/login")
-            }}>{name}</button> 
-          </div>
+function User() {
+  const [name, setname] = useState("Sign Up");
+  const [email, setemail] = useState("Log In");
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get("/api/user/currentuser");
+        setemail(response.data.data.email);
+        setname(response.data.data.username);
+      } catch (error) { }
+    };
+    fetchUser();
+  }, []);
+
+  return (
+    <div className="px-4 pt-1 pb-2">
+
+      {/* ── Collaboration Avatars ── */}
+      <div className="flex items-center gap-3 mb-3">
+        <div className="relative flex-shrink-0" style={{ width: 56 }}>
+          {/* Your avatar */}
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVF9XCN-3m0QhFLhp6NOK63wB2hRJXfmBcpg&s"
+            className="w-9 h-9 rounded-full object-cover border-[2.5px] border-[#0A0A0A] relative z-10"
+            alt="You"
+            onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/36/ffffff/000000?text=U'; }}
+          />
+          {/* Scambaiters logo — overlapping */}
+          <img
+            src="/lastlogo.png"
+            className="w-9 h-9 rounded-full object-cover border-[2.5px] border-[#0A0A0A] absolute top-0 left-5 z-20"
+            alt="Scambaiters"
+            onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/36/ffffff/000000?text=S'; }}
+          />
         </div>
-    )
+
+        <div className="flex flex-col min-w-0">
+          <span className="text-[10px] text-white/40 uppercase tracking-widest font-semibold mb-0.5">
+            Collab
+          </span>
+          <span className="text-[11px] text-white/30 leading-tight">
+            Protecting together
+          </span>
+        </div>
+      </div>
+
+      {/* ── User Info ── */}
+      <button
+        className="block text-white font-semibold text-sm hover:text-gray-300 transition-colors truncate w-full text-left"
+        onClick={() => router.push("/Account/login")}
+      >
+        {name}
+      </button>
+      <button
+        className="block text-white/35 text-xs hover:text-white/60 transition-colors truncate w-full text-left mt-0.5"
+        onClick={() => router.push("/Account/signup")}
+      >
+        {email}
+      </button>
+    </div>
+  );
 }
 
-export default User
+export default User;

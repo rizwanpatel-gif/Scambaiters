@@ -4,22 +4,23 @@ import Sidebar from "./components/ui/Sidebar";
 
 export default function Home() {
   return (
-    <div className="w-full min-h-screen flex flex-col md:flex-row bg-[#020d1f]">
-      {/* Sidebar: fixed on desktop, bottom navigation on mobile */}
-      <div className="md:w-64 md:min-w-[256px] md:max-w-[256px]">
+    <div className="w-full min-h-screen flex bg-[#111111]">
+
+      {/* Left Sidebar — +10% wider: 60→[264px] / 64→[282px] */}
+      <div className="hidden md:flex md:w-[264px] lg:w-[282px] flex-shrink-0">
         <Sidebar />
       </div>
-      
-      {/* Main Content */}
-      <main className="flex-1 px-4 md:px-8 py-6 max-w-4xl mx-auto w-full
-                     border-x border-[#1a2942] bg-gradient-to-b from-[#051530] to-[#0a1f3f]">
+
+      {/* Main Feed */}
+      <main className="flex-1 min-h-screen bg-[#111111] border-x border-white/[0.06] overflow-y-auto">
         <MainContent />
       </main>
 
-      {/* Right Sidebar */}
-      <div className="hidden lg:block w-80 min-w-[320px] max-w-[320px]">
+      {/* Right Panel — +10% wider: 72→[317px] / 80→[352px] */}
+      <div className="hidden lg:flex lg:w-[317px] xl:w-[352px] flex-shrink-0">
         <Leftbar />
       </div>
+
     </div>
   );
 }
