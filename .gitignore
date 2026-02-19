@@ -53,3 +53,4 @@ logs/
 
 # dist
 /dist
+.env*.local

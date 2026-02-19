@@ -5,11 +5,7 @@ declare global {
   var mongoose: CachedConnection | undefined;
 }
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env');
-}
-
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI || '';
 
 interface CachedConnection {
   conn: typeof mongoose | null;
@@ -24,6 +20,10 @@ if (!global.mongoose) {
 }
 
 async function connectDB() {
+  if (!process.env.MONGODB_URI) {
+    throw new Error('Please define the MONGODB_URI environment variable');
+  }
+
   if (cached.conn) {
     return cached;
   }
