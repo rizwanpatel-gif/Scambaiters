@@ -38,21 +38,17 @@ export function generateToken(payload: TokenPayload) {
 
 export async function setToken(token: string) {
   const cookieStore = await cookies();
-  console.log("Setting token cookie...");
   cookieStore.set({
     name: "token",
     value: token,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 // 7 days
+    maxAge: 7 * 24 * 60 * 60
   });
-  console.log("Token cookie set successfully");
 }
 
 export async function removeToken() {
   const cookieStore = await cookies();
-  console.log("Removing token cookie...");
   cookieStore.delete("token");
-  console.log("Token cookie removed successfully");
 } 

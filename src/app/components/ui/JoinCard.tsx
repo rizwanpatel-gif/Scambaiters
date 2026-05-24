@@ -19,7 +19,7 @@ function JoinCard({ head, main, bol, src }: {
     if (!bol) {
       axios.post("/api/user/userdetail", { userId: head })
         .then(r => setname(r.data.data.username))
-        .catch(console.log);
+        .catch(() => {});
     }
   }, []);
 

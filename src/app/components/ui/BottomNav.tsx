@@ -1,6 +1,6 @@
 "use client"
 
-import { IconHomeFilled, IconBuildingCommunity, IconPlus, IconUserFilled, IconSearch } from '@tabler/icons-react'
+import { IconHomeFilled, IconPlus, IconUserFilled } from '@tabler/icons-react'
 import { useRouter, usePathname } from 'next/navigation'
 
 export function BottomNav() {
@@ -10,11 +10,9 @@ export function BottomNav() {
   if (pathname.startsWith('/Account')) return null
 
   const items = [
-    { icon: IconHomeFilled,        label: 'Home',        path: '/' },
-    { icon: IconBuildingCommunity, label: 'Communities', path: '/user' },
-    { icon: IconPlus,              label: '',            path: '/post', isCreate: true },
-    { icon: IconSearch,            label: 'Search',      path: '/' },
-    { icon: IconUserFilled,        label: 'Profile',     path: '/user' },
+    { icon: IconHomeFilled,  label: 'Home',    path: '/',     isCreate: false },
+    { icon: IconPlus,        label: '',        path: '/post', isCreate: true },
+    { icon: IconUserFilled,  label: 'Profile', path: '/user', isCreate: false },
   ]
 
   return (

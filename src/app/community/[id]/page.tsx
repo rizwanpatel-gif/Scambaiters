@@ -123,10 +123,13 @@ function Page() {
                 <PostCard
                   key={post._id}
                   postId={post._id}
-                  name={name}
+                  name={post.name}
                   title={post.title}
-                  content={post.description}
-                  Tlike={post.likes}
+                  content={post.content}
+                  communityId={post.communitid}
+                  Tlike={post.likes || 0}
+                  comments={post.comments?.length || 0}
+                  media={post.media}
                 />
               ))
             )}

@@ -38,22 +38,28 @@ const PostSkeleton = ({ i }: { i: number }) => (
 );
 
 function MainContent() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (pageNum = 1, append = false) => {
     try {
-      setIsLoading(true);
-      const res = await axios.get("/api/post/postdata");
-      setPosts(res.data.postdata);
-    } catch (e) {
-      console.log(e);
+      if (!append) setIsLoading(true);
+      else setIsLoadingMore(true);
+      const res = await axios.get(`/api/post/postdata?page=${pageNum}&limit=10`);
+      const newPosts = res.data.postdata || [];
+      setPosts(prev => append ? [...prev, ...newPosts] : newPosts);
+      setHasMore(pageNum < res.data.totalPages);
+    } catch {
     } finally {
       setIsLoading(false);
+      setIsLoadingMore(false);
     }
   };
 
@@ -71,7 +77,13 @@ function MainContent() {
     }
   }, []);
 
-  useEffect(() => { fetchPosts(); }, []);
+  useEffect(() => { fetchPosts(1); }, []);
+
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchPosts(nextPage, true);
+  };
 
   const handleClearSearch = () => {
     setSearchQuery("");
@@ -191,6 +203,25 @@ function MainContent() {
           media={post.media}
         />
       ))}
+
+      {/* ── Load more ── */}
+      {!isLoading && !showSearchResults && hasMore && (
+        <button
+          onClick={handleLoadMore}
+          disabled={isLoadingMore}
+          className="mt-2 mb-4 flex items-center gap-2 px-6 py-2.5 rounded-full bg-white border border-black/[0.08] shadow-sm text-sm font-semibold text-black/50 hover:text-[#0A0A0A] hover:border-black/20 hover:shadow-md transition-all duration-200 disabled:opacity-40"
+        >
+          {isLoadingMore
+            ? <><div className="w-3.5 h-3.5 border-2 border-black/20 border-t-black/50 rounded-full animate-spin" /> Loading…</>
+            : 'Load more'
+          }
+        </button>
+      )}
+
+      {/* ── All caught up ── */}
+      {!isLoading && !showSearchResults && !hasMore && posts.length > 0 && (
+        <p className="text-xs text-black/25 font-medium py-6">You're all caught up</p>
+      )}
 
     </div>
   );

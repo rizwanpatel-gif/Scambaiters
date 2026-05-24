@@ -1,13 +1,12 @@
 "use client"
-import { IconBuildingCommunity, IconHomeFilled, IconMessageCircle, IconSettingsFilled } from '@tabler/icons-react'
+import { IconHomeFilled, IconPencilPlus, IconUserFilled } from '@tabler/icons-react'
 import { useRouter, usePathname } from 'next/navigation'
 import React from 'react'
 
 const navItems = [
-  { icon: IconHomeFilled,          label: 'Feed',        path: '/' },
-  { icon: IconBuildingCommunity,   label: 'Communities', path: '/user' },
-  { icon: IconMessageCircle,       label: 'Comments',    path: '/comments' },
-  { icon: IconSettingsFilled,      label: 'Settings',    path: '/user' },
+  { icon: IconHomeFilled,   label: 'Feed',        path: '/' },
+  { icon: IconPencilPlus,  label: 'Create Post', path: '/post' },
+  { icon: IconUserFilled,  label: 'Profile',     path: '/user' },
 ];
 
 function SidebarNav() {
