@@ -7,32 +7,43 @@ import Volunteer from './Volunteer'
 
 function Sidebar() {
   return (
-    <aside className="w-full min-h-screen flex flex-col sticky top-0 bg-[#0A0A0A] overflow-y-auto">
+    <aside className="w-full flex flex-col bg-[#F2F2F2]">
 
-      {/* Brand */}
-      <div className="px-5 py-5 border-b border-white/10 flex-shrink-0">
-        <div className="flex items-center gap-2.5">
-          <img
-            src="/lastlogo.png"
-            className="w-7 h-7 rounded-lg object-cover"
-            alt="Scambaiters"
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = 'none';
-            }}
-          />
-          <span className="text-white font-bold text-base tracking-tight">Scambaiters</span>
+      {/* Brand card */}
+      <div className="px-3 pt-3 pb-1 flex-shrink-0">
+        <div className="bg-white rounded-2xl px-4 py-3 shadow-sm border border-black/[0.04]">
+          <div className="flex items-center gap-2.5">
+            <img
+              src="/lastlogo.png"
+              className="w-7 h-7 rounded-lg object-cover"
+              alt="Scambaiters"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+            <span className="text-[#0A0A0A] font-bold text-base tracking-tight">Scambaiters</span>
+          </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 py-4 space-y-6 overflow-y-auto">
-        <User />
-        <div className="border-t border-white/10 pt-5">
+      {/* Scrollable content */}
+      <div className="flex-1 px-3 py-2 space-y-2.5 overflow-y-auto pb-4">
+
+        {/* User card */}
+        <div className="bg-white rounded-2xl p-3 shadow-sm border border-black/[0.04]">
+          <User />
+        </div>
+
+        {/* Menu card */}
+        <div className="bg-white rounded-2xl p-3 shadow-sm border border-black/[0.04]">
           <SidebarNav />
         </div>
-        <div className="border-t border-white/10 pt-5">
+
+        {/* Community card */}
+        <div className="bg-white rounded-2xl p-3 shadow-sm border border-black/[0.04]">
           <Volunteer />
         </div>
+
       </div>
     </aside>
   )

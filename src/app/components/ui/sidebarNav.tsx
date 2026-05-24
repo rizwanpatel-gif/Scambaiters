@@ -16,7 +16,7 @@ function SidebarNav() {
 
   return (
     <nav className="w-full px-3">
-      <p className="text-[10px] font-semibold text-white/25 uppercase tracking-widest px-3 mb-2">Menu</p>
+      <p className="text-[10px] font-semibold text-black/30 uppercase tracking-widest px-3 mb-2">Menu</p>
       <ul className="space-y-0.5">
         {navItems.map(({ icon: Icon, label, path }) => {
           const isActive = pathname === path;
@@ -26,8 +26,8 @@ function SidebarNav() {
                 onClick={() => router.push(path)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
                   isActive
-                    ? 'bg-white text-[#0A0A0A]'
-                    : 'text-white/55 hover:bg-white/10 hover:text-white'
+                    ? 'bg-[#0A0A0A] text-white'
+                    : 'text-black/55 hover:bg-black/[0.05] hover:text-black'
                 }`}
               >
                 <Icon size={17} />

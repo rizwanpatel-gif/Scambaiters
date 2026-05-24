@@ -12,39 +12,39 @@
   }
 
   body {
-    @apply bg-[#111111] text-[#F0F0F0] antialiased;
+    @apply bg-[#F2F2F2] text-[#0A0A0A] antialiased;
   }
 
-  h1 { @apply text-4xl md:text-5xl font-bold tracking-tight text-[#F0F0F0]; }
-  h2 { @apply text-3xl md:text-4xl font-semibold tracking-tight text-[#F0F0F0]; }
-  h3 { @apply text-2xl md:text-3xl font-semibold tracking-tight text-[#F0F0F0]; }
-  h4 { @apply text-xl md:text-2xl font-medium text-[#F0F0F0]; }
-  p  { @apply text-base leading-relaxed text-[#AAAAAA]; }
-  small { @apply text-sm text-[#666666]; }
+  h1 { @apply text-4xl md:text-5xl font-bold tracking-tight text-[#0A0A0A]; }
+  h2 { @apply text-3xl md:text-4xl font-semibold tracking-tight text-[#0A0A0A]; }
+  h3 { @apply text-2xl md:text-3xl font-semibold tracking-tight text-[#0A0A0A]; }
+  h4 { @apply text-xl md:text-2xl font-medium text-[#0A0A0A]; }
+  p  { @apply text-base leading-relaxed text-[#555555]; }
+  small { @apply text-sm text-[#888888]; }
 }
 
 /* ── CSS Variables ── */
 @layer base {
   :root {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 94%;
-    --card: 0 0% 9%;
-    --card-foreground: 0 0% 94%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 94%;
-    --primary: 0 0% 94%;
-    --primary-foreground: 0 0% 7%;
-    --secondary: 0 0% 13%;
-    --secondary-foreground: 0 0% 94%;
-    --muted: 0 0% 13%;
-    --muted-foreground: 0 0% 55%;
-    --accent: 0 0% 13%;
-    --accent-foreground: 0 0% 94%;
+    --background: 0 0% 95%;
+    --foreground: 0 0% 7%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+    --primary: 0 0% 7%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 7%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 7%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 16%;
-    --input: 0 0% 16%;
-    --ring: 0 0% 83%;
+    --border: 0 0% 88%;
+    --input: 0 0% 94%;
+    --ring: 0 0% 20%;
     --radius: 0.75rem;
   }
 }

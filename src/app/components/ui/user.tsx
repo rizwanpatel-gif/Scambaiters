@@ -28,24 +28,24 @@ function User() {
           {/* Your avatar */}
           <img
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVF9XCN-3m0QhFLhp6NOK63wB2hRJXfmBcpg&s"
-            className="w-9 h-9 rounded-full object-cover border-[2.5px] border-[#0A0A0A] relative z-10"
+            className="w-9 h-9 rounded-full object-cover border-[2.5px] border-white relative z-10"
             alt="You"
             onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/36/ffffff/000000?text=U'; }}
           />
           {/* Scambaiters logo — overlapping */}
           <img
             src="/lastlogo.png"
-            className="w-9 h-9 rounded-full object-cover border-[2.5px] border-[#0A0A0A] absolute top-0 left-5 z-20"
+            className="w-9 h-9 rounded-full object-cover border-[2.5px] border-white absolute top-0 left-5 z-20"
             alt="Scambaiters"
             onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/36/ffffff/000000?text=S'; }}
           />
         </div>
 
         <div className="flex flex-col min-w-0">
-          <span className="text-[10px] text-white/40 uppercase tracking-widest font-semibold mb-0.5">
+          <span className="text-[10px] text-black/40 uppercase tracking-widest font-semibold mb-0.5">
             Collab
           </span>
-          <span className="text-[11px] text-white/30 leading-tight">
+          <span className="text-[11px] text-black/30 leading-tight">
             Protecting together
           </span>
         </div>
@@ -53,13 +53,13 @@ function User() {
 
       {/* ── User Info ── */}
       <button
-        className="block text-white font-semibold text-sm hover:text-gray-300 transition-colors truncate w-full text-left"
+        className="block text-[#0A0A0A] font-semibold text-sm hover:text-gray-600 transition-colors truncate w-full text-left"
         onClick={() => router.push("/Account/login")}
       >
         {name}
       </button>
       <button
-        className="block text-white/35 text-xs hover:text-white/60 transition-colors truncate w-full text-left mt-0.5"
+        className="block text-black/40 text-xs hover:text-black/60 transition-colors truncate w-full text-left mt-0.5"
         onClick={() => router.push("/Account/signup")}
       >
         {email}

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { CacheProvider } from "./context/CacheContext";
+import { BottomNav } from "./components/ui/BottomNav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
         <CacheProvider>
           <Toaster position="top-center" />
           {children}
+          <BottomNav />
         </CacheProvider>
       </body>
     </html>

@@ -1,21 +1,14 @@
 import React from 'react'
 
-
-
-function Description({description,name}:{
-     description:string,
-     name:string
-}) {
-
-
-    return (
-        <div className="w-11/12 h-[300px] bg-neutral-950 rounded-[38px] my-5 text-white px-[3vh] py-2 text-balance overflow-auto shadow-sm shadow-white  transition-transform transform hover:-translate-y-1 hover:shadow-md hover:shadow-white">
-       <h1 className='text-2xl  font-Roboto Flex font-bold '>{name}</h1>
-         {
-            description
-         }
-       </div>
-      )
+function Description({ description, name }: { description: string; name: string }) {
+  return (
+    <div className="bg-white rounded-2xl p-4 shadow-sm border border-black/[0.04] my-3">
+      <h2 className="text-sm font-bold text-[#0A0A0A] capitalize mb-2">{name}</h2>
+      <p className="text-sm text-black/50 leading-relaxed overflow-auto">
+        {description || 'No description available.'}
+      </p>
+    </div>
+  );
 }
 
-export default Description
+export default Description;

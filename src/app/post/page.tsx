@@ -1,306 +1,313 @@
 "use client"
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-hot-toast';
-import MediaUpload from '../components/ui/MediaUpload';
+
+import axios from 'axios'
+import { useEffect, useState, useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-hot-toast'
+import Sidebar from '../components/ui/Sidebar'
+import MediaUpload from '../components/ui/MediaUpload'
+import {
+  IconArrowLeft, IconPhoto, IconX,
+  IconBuildingCommunity, IconAlignLeft, IconHeading
+} from '@tabler/icons-react'
 
 interface MediaFile {
-  url: string;
-  type: 'image' | 'video';
-  publicId: string;
+  url: string
+  type: 'image' | 'video'
+  publicId: string
 }
 
-interface Community {
-  _id: string;
-  name: string;
-}
+export default function Page() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [authChecked, setAuthChecked] = useState(false)
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([])
+  const [communityName, setCommunityName] = useState('')
+  const [communities, setCommunities] = useState<string[]>([])
+  const [filteredCommunities, setFilteredCommunities] = useState<string[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [isValidCommunity, setIsValidCommunity] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
-function Page() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
-  const [communityName, setCommunityName] = useState('');
-  const [communities, setCommunities] = useState<string[]>([]);
-  const [filteredCommunities, setFilteredCommunities] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isValidCommunity, setIsValidCommunity] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  // Fetch all communities on component mount
   useEffect(() => {
-    fetchCommunities();
-  }, []);
-
-  const fetchCommunities = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/api/communities/communitynames");
-      // The API returns an array of community names directly
-      if (Array.isArray(response.data.data)) {
-        setCommunities(response.data.data);
-      } else {
-        console.error("Unexpected API response format:", response.data);
-        toast.error("Failed to load communities");
+    const init = async () => {
+      try {
+        const cu = await axios.get('/api/user/currentuser')
+        if (!cu.data.data?._id) {
+          toast.error('Please login to create a post')
+          router.push('/Account/login')
+          return
+        }
+        setAuthChecked(true)
+        const res = await axios.get('/api/communities/communitynames')
+        if (Array.isArray(res.data.data)) setCommunities(res.data.data)
+      } catch {
+        toast.error('Please login to create a post')
+        router.push('/Account/login')
       }
-    } catch (error) {
-      console.log("Failed to fetch communities", error);
-      toast.error("Failed to load communities");
     }
-  };
+    init()
+  }, [])
 
-  // Handle community name input changes
-  const handleCommunityNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCommunityName(value);
-    
-    if (value.trim() === '') {
-      setFilteredCommunities([]);
-      setShowSuggestions(false);
-      setIsValidCommunity(false);
-      return;
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false)
+      }
     }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
 
-    // Filter communities based on input
-    const filtered = communities.filter(communityName => 
-      communityName.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredCommunities(filtered);
-    setShowSuggestions(true);
-    
-    // Check if the exact community name exists
-    const exactMatch = communities.some(communityName => 
-      communityName.toLowerCase() === value.toLowerCase()
-    );
-    setIsValidCommunity(exactMatch);
-  };
+  const handleCommunityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value
+    setCommunityName(val)
+    if (!val.trim()) {
+      setFilteredCommunities([])
+      setShowSuggestions(false)
+      setIsValidCommunity(false)
+      return
+    }
+    const filtered = communities.filter(c => c.toLowerCase().includes(val.toLowerCase()))
+    setFilteredCommunities(filtered)
+    setShowSuggestions(true)
+    setIsValidCommunity(communities.some(c => c.toLowerCase() === val.toLowerCase()))
+  }
 
-  // Handle community suggestion selection
-  const handleCommunitySelect = (selectedName: string) => {
-    setCommunityName(selectedName);
-    setShowSuggestions(false);
-    setIsValidCommunity(true);
-    toast.success("Valid community selected!");
-  };
+  const selectCommunity = (name: string) => {
+    setCommunityName(name)
+    setIsValidCommunity(true)
+    setShowSuggestions(false)
+  }
 
-  const handleMediaUpload = (files: MediaFile[]) => {
-    setMediaFiles(files);
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!title.trim()) { toast.error('Title is required'); return }
+    if (!content.trim()) { toast.error('Content is required'); return }
+    if (!isValidCommunity) { toast.error('Select a valid community'); return }
+    if (title.length > 100) { toast.error('Title too long (max 100 chars)'); return }
 
-  const validatePost = () => {
-    if (!title.trim()) {
-      toast.error('Title is required');
-      return false;
-    }
-    if (!content.trim()) {
-      toast.error('Content is required');
-      return false;
-    }
-    if (!communityName.trim()) {
-      toast.error('Community name is required');
-      return false;
-    }
-    if (!isValidCommunity) {
-      toast.error('Please select a valid community');
-      return false;
-    }
-    if (title.length > 100) {
-      toast.error('Title is too long (max 100 characters)');
-      return false;
-    }
-    if (content.length > 5000) {
-      toast.error('Content is too long (max 5000 characters)');
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmitPost = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validatePost()) return;
-    
     try {
-      setLoading(true);
-      
-      // Get current user
-      const currentUser = await axios.get('/api/user/currentuser');
-      
-      // Create FormData instance
-      const formData = new FormData();
-      
-      // Append basic post data
-      formData.append('name', communityName);
-      formData.append('userid', currentUser.data.data._id);
-      formData.append('title', title.trim());
-      formData.append('content', content.trim());
-      
-      // Append media files
+      setLoading(true)
+      const cu = await axios.get('/api/user/currentuser')
+      const formData = new FormData()
+      formData.append('name', communityName)
+      formData.append('userid', cu.data.data._id)
+      formData.append('title', title.trim())
+      formData.append('content', content.trim())
+
       for (const file of mediaFiles) {
         try {
-          // Fetch the file from the URL
-          const response = await fetch(file.url);
-          const blob = await response.blob();
-          
-          // Create a File object from the blob
-          const fileObject = new File([blob], `file-${Date.now()}.${file.type === 'image' ? 'jpg' : 'mp4'}`, {
+          const res = await fetch(file.url)
+          const blob = await res.blob()
+          const f = new File([blob], `file-${Date.now()}.${file.type === 'image' ? 'jpg' : 'mp4'}`, {
             type: file.type === 'image' ? 'image/jpeg' : 'video/mp4'
-          });
-          
-          // Append the file to FormData
-          
-          formData.append('files', fileObject);
-          console.log(formData);
-        } catch (error) {
-          console.error('Error processing file:', error);
-          toast.error('Error processing one or more files');
+          })
+          formData.append('files', f)
+        } catch {
+          toast.error('Error processing a file')
         }
       }
 
-      // Send the request with FormData
       const response = await axios.post('/api/post', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-       console.log(response);
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
       if (response.status === 200) {
-        toast.success('Post created successfully!');
-        router.push('/');
+        toast.success('Post created!')
+        router.push('/')
       }
-    } catch (error: any) {
-      console.error('Post creation error:', error);
-      if (error.response?.status === 401) {
-        toast.error('Please login to create a post');
-        router.push('/Account/login');
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        toast.error('Please login to create a post')
+        router.push('/Account/login')
       } else {
-        toast.error(error.response?.data?.message || 'Failed to create post');
+        toast.error(err.response?.data?.message || 'Failed to create post')
       }
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
+
+  if (!authChecked) {
+    return (
+      <div className="h-screen overflow-hidden flex bg-[#F2F2F2]">
+        <div className="hidden md:flex w-[264px] lg:w-[282px] flex-shrink-0 h-screen overflow-y-auto">
+          <Sidebar />
+        </div>
+        <main className="flex-1 flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-black/10 border-t-black/40 rounded-full animate-spin" />
+        </main>
+      </div>
+    )
+  }
 
   return (
-    <div className="min-h-screen bg-black py-8">
-      <div className="max-w-4xl mx-auto px-4">
-        <form onSubmit={handleSubmitPost} className="bg-neutral-900 rounded-[38px] p-6 shadow-lg shadow-white">
-          <h1 className="text-3xl font-bold text-white mb-6">Create a Post</h1>
-          
-          {/* Community Name Input with Suggestions */}
-          <div className="mb-6 relative">
-            <input
-              type="text"
-              value={communityName}
-              onChange={handleCommunityNameChange}
-              onFocus={() => setShowSuggestions(true)}
-              placeholder="Enter community name"
-              className={`w-full p-3 bg-neutral-800 text-white rounded-lg border ${
-                communityName && (isValidCommunity ? 'border-green-500' : 'border-red-500')
-              } focus:border-green-500 focus:ring-1 focus:ring-green-500`}
-              disabled={loading}
-            />
-            {communityName && !isValidCommunity && (
-              <p className="text-red-500 text-sm mt-1">Please select a valid community from the suggestions</p>
-            )}
-            {showSuggestions && filteredCommunities.length > 0 && (
-              <div className="absolute z-10 w-full mt-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                {filteredCommunities.map((name, index) => (
-                  <div
-                    key={index}
-                    className="px-4 py-2 hover:bg-neutral-700 cursor-pointer text-white"
-                    onClick={() => handleCommunitySelect(name)}
+    <div className="h-screen overflow-hidden flex bg-[#F2F2F2]">
+
+      {/* ── Sidebar ── */}
+      <div className="hidden md:flex w-[264px] lg:w-[282px] flex-shrink-0 h-screen overflow-y-auto">
+        <Sidebar />
+      </div>
+
+      {/* ── Main ── */}
+      <main className="flex-1 h-screen overflow-y-auto pb-16 md:pb-6">
+        <div className="max-w-2xl mx-auto px-4 py-6">
+
+          {/* Header */}
+          <div className="flex items-center gap-3 mb-5">
+            <button
+              onClick={() => router.back()}
+              className="flex items-center justify-center w-8 h-8 rounded-xl bg-white shadow-sm border border-black/[0.06] hover:bg-[#F2F2F2] transition-colors"
+            >
+              <IconArrowLeft size={16} className="text-black/50" />
+            </button>
+            <h1 className="text-xl font-bold text-[#0A0A0A]">Create Post</h1>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-3">
+
+            {/* Community selector */}
+            <div className="bg-white rounded-2xl shadow-sm border border-black/[0.04] p-4" ref={dropdownRef}>
+              <label className="text-[10px] font-semibold text-black/30 uppercase tracking-widest flex items-center gap-1.5 mb-2">
+                <IconBuildingCommunity size={12} />
+                Community
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={communityName}
+                  onChange={handleCommunityChange}
+                  onFocus={() => communityName && setShowSuggestions(true)}
+                  placeholder="Search for a community…"
+                  disabled={loading}
+                  className={`w-full h-10 px-3 rounded-xl text-sm font-medium text-[#0A0A0A] placeholder-black/25 outline-none transition-all border ${
+                    communityName
+                      ? isValidCommunity
+                        ? 'border-green-400 bg-green-50'
+                        : 'border-red-300 bg-red-50'
+                      : 'border-black/[0.08] bg-[#F2F2F2] focus:border-black/20 focus:bg-white'
+                  }`}
+                />
+                {communityName && (
+                  <button
+                    type="button"
+                    onClick={() => { setCommunityName(''); setIsValidCommunity(false); setShowSuggestions(false) }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-black/25 hover:text-black/50"
                   >
-                    {name}
+                    <IconX size={13} />
+                  </button>
+                )}
+                {showSuggestions && filteredCommunities.length > 0 && (
+                  <div className="absolute z-20 w-full mt-1.5 bg-white rounded-xl shadow-lg border border-black/[0.06] max-h-48 overflow-y-auto">
+                    {filteredCommunities.map((name) => (
+                      <button
+                        key={name}
+                        type="button"
+                        onClick={() => selectCommunity(name)}
+                        className="w-full text-left px-3 py-2.5 text-sm text-[#0A0A0A] hover:bg-[#F2F2F2] transition-colors capitalize flex items-center gap-2"
+                      >
+                        <div className="w-6 h-6 rounded-lg bg-[#FFF5CC] flex items-center justify-center text-xs font-bold text-black/40">
+                          {name.charAt(0).toUpperCase()}
+                        </div>
+                        {name}
+                      </button>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
-            )}
-          </div>
+              {communityName && !isValidCommunity && (
+                <p className="text-xs text-red-400 mt-1.5">Pick a community from the list</p>
+              )}
+              {isValidCommunity && (
+                <p className="text-xs text-green-500 mt-1.5">✓ Community selected</p>
+              )}
+            </div>
 
-          {/* Title Input */}
-          <div className="mb-6">
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter post title"
-              className="w-full p-3 bg-neutral-800 text-white rounded-lg border border-neutral-700 focus:border-green-500 focus:ring-1 focus:ring-green-500"
-              maxLength={100}
-              disabled={loading}
-            />
-            <p className="text-sm text-gray-400 mt-1">{title.length}/100 characters</p>
-          </div>
+            {/* Title */}
+            <div className="bg-white rounded-2xl shadow-sm border border-black/[0.04] p-4">
+              <label className="text-[10px] font-semibold text-black/30 uppercase tracking-widest flex items-center gap-1.5 mb-2">
+                <IconHeading size={12} />
+                Title
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Give your post a title…"
+                maxLength={100}
+                disabled={loading}
+                className="w-full h-10 px-3 rounded-xl text-sm font-medium text-[#0A0A0A] placeholder-black/25 outline-none border border-black/[0.08] bg-[#F2F2F2] focus:border-black/20 focus:bg-white transition-all"
+              />
+              <p className="text-[11px] text-black/25 mt-1.5 text-right">{title.length}/100</p>
+            </div>
 
-          {/* Content Input */}
-          <div className="mb-6">
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Write your post content..."
-              className="w-full p-3 bg-neutral-800 text-white rounded-lg border border-neutral-700 focus:border-green-500 focus:ring-1 focus:ring-green-500 min-h-[200px]"
-              maxLength={5000}
-              disabled={loading}
-            />
-            <p className="text-sm text-gray-400 mt-1">{content.length}/5000 characters</p>
-          </div>
+            {/* Content */}
+            <div className="bg-white rounded-2xl shadow-sm border border-black/[0.04] p-4">
+              <label className="text-[10px] font-semibold text-black/30 uppercase tracking-widest flex items-center gap-1.5 mb-2">
+                <IconAlignLeft size={12} />
+                Content
+              </label>
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Share your scam report, warning, or story…"
+                maxLength={5000}
+                rows={7}
+                disabled={loading}
+                className="w-full px-3 py-2.5 rounded-xl text-sm text-[#0A0A0A] placeholder-black/25 outline-none border border-black/[0.08] bg-[#F2F2F2] focus:border-black/20 focus:bg-white transition-all resize-none leading-relaxed"
+              />
+              <p className="text-[11px] text-black/25 mt-1.5 text-right">{content.length}/5000</p>
+            </div>
 
-          {/* Media Upload */}
-          <div className="mb-6">
-            <MediaUpload onMediaUpload={handleMediaUpload} />
-            {mediaFiles.length > 0 && (
-              <div className="mt-4">
-                <p className="text-sm text-gray-400 mb-2">
-                  {mediaFiles.length} {mediaFiles.length === 1 ? 'file' : 'files'} selected
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {mediaFiles.map((file, index) => (
-                    <div key={file.publicId} className="relative group">
+            {/* Media */}
+            <div className="bg-white rounded-2xl shadow-sm border border-black/[0.04] p-4">
+              <label className="text-[10px] font-semibold text-black/30 uppercase tracking-widest flex items-center gap-1.5 mb-3">
+                <IconPhoto size={12} />
+                Media (optional)
+              </label>
+              <MediaUpload onMediaUpload={setMediaFiles} />
+              {mediaFiles.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
+                  {mediaFiles.map((file, i) => (
+                    <div key={file.publicId} className="relative rounded-xl overflow-hidden aspect-video bg-[#F2F2F2]">
                       {file.type === 'image' ? (
-                        <img
-                          src={file.url}
-                          alt={`Uploaded media ${index + 1}`}
-                          className="w-full h-48 object-cover rounded-lg"
-                        />
+                        <img src={file.url} alt={`media ${i + 1}`} className="w-full h-full object-cover" />
                       ) : (
-                        <video
-                          src={file.url}
-                          controls
-                          className="w-full h-48 object-cover rounded-lg"
-                        />
+                        <video src={file.url} className="w-full h-full object-cover" />
                       )}
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              disabled={loading}
-              className={`px-6 py-3 rounded-full font-semibold text-white ${
-                loading 
-                  ? 'bg-gray-500 cursor-not-allowed' 
-                  : 'bg-green-500 hover:bg-green-600'
-              } transition-colors`}
-            >
-              {loading ? 'Creating Post...' : 'Create Post'}
-            </button>
-          </div>
-        </form>
-      </div>
+            {/* Actions */}
+            <div className="flex items-center justify-between pt-1">
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="text-sm font-semibold text-black/40 hover:text-black/70 transition-colors px-4 py-2.5"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading || !isValidCommunity || !title.trim() || !content.trim()}
+                className="flex items-center gap-2 bg-[#0A0A0A] hover:bg-[#333] disabled:opacity-35 text-white text-sm font-bold px-6 py-2.5 rounded-full transition-all duration-200"
+              >
+                {loading
+                  ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Publishing…</>
+                  : 'Publish Post'
+                }
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </main>
     </div>
-  );
+  )
 }
-
-export default Page;
