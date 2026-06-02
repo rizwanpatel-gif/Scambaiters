@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import Groq from 'groq-sdk';
 
 const MAX_CONTENT_LENGTH = 2000;
 
@@ -14,23 +14,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: `Content too long. Max length is ${MAX_CONTENT_LENGTH} characters.` }, { status: 400 });
     }
 
-    const geminiApiKey = process.env.GEMINI_API_KEY;
-    if (!geminiApiKey) {
-      return NextResponse.json({ error: 'Gemini API key not configured' }, { status: 500 });
+    const groqApiKey = process.env.GROQ_API_KEY;
+    if (!groqApiKey) {
+      return NextResponse.json({ error: 'Groq API key not configured' }, { status: 500 });
     }
 
-    const genAI = new GoogleGenerativeAI(geminiApiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const groq = new Groq({ apiKey: groqApiKey });
+    const completion = await groq.chat.completions.create({
+      model: 'llama-3.1-8b-instant',
+      messages: [{ role: 'user', content: `Summarize the following content in 2-3 sentences:\n\n${content}` }],
+      max_tokens: 200,
+    });
 
-    const prompt = `Summarize the following content in 2-3 sentences:\n\n${content}`;
-    const result = await model.generateContent(prompt);
-    const summary = result.response.text();
-
+    const summary = completion.choices[0]?.message?.content ?? '';
     return NextResponse.json({ summary });
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Groq summarize error:', message);
     return NextResponse.json(
-      { error: 'Failed to generate summary with Gemini. Please try again later.' },
+      { error: 'Failed to generate summary. Please try again later.' },
       { status: 500 }
     );
   }
-} 
+}
