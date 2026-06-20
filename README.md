@@ -10,7 +10,7 @@ A modern fraud prevention and community platform built with Next.js 15, featurin
 
 ##  Features
 
-### 🤖 AI-Powered Content Summarization
+### AI-Powered Content Summarization
 - **Gemini API Integration**: Intelligent content summarization using Google's Gemini AI
 - **Modal Interface**: Clean modal display showing original vs summarized content
 - **Rate Limiting**: Client-side protection against API abuse
