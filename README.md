@@ -1,4 +1,4 @@
-# 🛡️ ScamBaiter
+#  ScamBaiter
 
 A modern fraud prevention and community platform built with Next.js 15, featuring AI-powered content summarization, real-time search, and responsive design.
 
@@ -8,7 +8,7 @@ A modern fraud prevention and community platform built with Next.js 15, featurin
 ![Docker](https://img.shields.io/badge/Docker-Container-blue?style=for-the-badge&logo=docker)
 ![AWS](https://img.shields.io/badge/AWS-EC2-orange?style=for-the-badge&logo=amazon-aws)
 
-## ✨ Features
+##  Features
 
 ### 🤖 AI-Powered Content Summarization
 - **Gemini API Integration**: Intelligent content summarization using Google's Gemini AI
@@ -16,31 +16,31 @@ A modern fraud prevention and community platform built with Next.js 15, featurin
 - **Rate Limiting**: Client-side protection against API abuse
 - **Error Handling**: Graceful fallbacks for API failures
 
-### 🔍 Real-Time Search
+### Real-Time Search
 - **Title-Based Search**: Find posts by keywords in titles
 - **Case-Insensitive**: Search works regardless of case
 - **Enter Key Trigger**: Search only executes when user presses Enter
 - **Live Results**: Instant display of search results with count
 
-### 📱 Responsive Design
+###  Responsive Design
 - **Mobile-First**: Optimized for all device sizes
 - **Tailwind CSS**: Modern, utility-first styling
 - **Dark Mode**: Built-in dark theme support
 - **Loading Skeletons**: Smooth loading experience with animated placeholders
 
-### 🏗️ Modern Architecture
+### Modern Architecture
 - **Next.js 15**: Latest React framework with App Router
 - **TypeScript**: Full type safety and better development experience
 - **MongoDB**: NoSQL database with Mongoose ODM
 - **Component-Based**: Reusable, modular components
 
-### 🚀 Deployment Ready
+###  Deployment Ready
 - **Docker Containerization**: Easy deployment and scaling
 - **AWS EC2**: Cloud deployment with automated scripts
 - **Environment Variables**: Secure configuration management
 - **Production Optimized**: Built for high performance
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Frontend**: Next.js 15, TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes, MongoDB, Mongoose
@@ -48,7 +48,7 @@ A modern fraud prevention and community platform built with Next.js 15, featurin
 - **Deployment**: Docker, AWS EC2
 - **Development**: ESLint, PostCSS, Autoprefixer
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Node.js 18+ 
@@ -87,7 +87,7 @@ A modern fraud prevention and community platform built with Next.js 15, featurin
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 📖 Usage
+##  Usage
 
 ### Creating Posts
 1. Navigate to the post creation page
@@ -112,7 +112,7 @@ A modern fraud prevention and community platform built with Next.js 15, featurin
 2. Become a member to interact with community content
 3. View community-specific posts
 
-## 🏗️ Project Structure
+##  Project Structure
 
 ```
 scambaiter/
@@ -151,7 +151,7 @@ scambaiter/
 - `POST /api/post/likes` - Handle post likes
 - `POST /api/user/join` - Join communities
 
-## 🐳 Docker Deployment
+## Docker Deployment
 
 ### Build the image
 ```bash
@@ -174,17 +174,7 @@ docker run -p 3000:3000 --env-file .env.local scambaiter
    ```
 4. **Access application** at your EC2 public IP
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
@@ -193,10 +183,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Tailwind CSS](https://tailwindcss.com/) for beautiful styling
 - [MongoDB](https://www.mongodb.com/) for the database solution
 
-## 📞 Support
 
-For support, email support@scambaiter.com or create an issue in this repository.
-
----
 
 **Built with ❤️ for the community**
